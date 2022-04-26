@@ -5,14 +5,16 @@ public class Main {
     static final int TIME_BEFORE_THE_ACTION_OF_THE_BOX = 1000;
 
     public static void main(String[] args) throws InterruptedException {
-        Thread user = new Thread(null, Main::user, "Пользователь");
+        Thread user = new Thread(null, Main::user2, "Пользователь");
         Thread toy = new Thread(null, Main::toy, "Коробка");
-
         user.start();
         toy.start();
+        while (user.isAlive()) {
+        }
+        toy.interrupt();
     }
 
-    public static void user() {
+    public static void user2() {
         for (int i = 0; i < NUMBER_OF_GAMES; i++) {
             box.changingTheStateOfTheBox(true);
             try {
@@ -24,7 +26,7 @@ public class Main {
     }
 
     public static void toy() {
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             if (box.getStateOfTheBox() == true) {
                 try {
                     Thread.sleep(TIME_BEFORE_THE_ACTION_OF_THE_BOX);
